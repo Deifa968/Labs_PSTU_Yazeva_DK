@@ -7,4 +7,4 @@ bachelor
 			lab1
 			lab2
 |№|название|срок|статус|
-[картинка1](D:\Study)
+[картинка1](![Uploading a090d256031c67c93ed7e09a2ab6a84d.jpg…])

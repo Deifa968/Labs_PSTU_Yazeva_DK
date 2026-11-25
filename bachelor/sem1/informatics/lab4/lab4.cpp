@@ -1,66 +1,90 @@
 #include <iostream>
-#include <vector>
-#include <random>
-#include <cmath>
-#include <clocale>
-
+#include <cstdlib>
 using namespace std;
 
-int main() {
-    setlocale(LC_ALL, "RU");
-    // Настройка генератора случайных чисел
-    random_device rd;
-    mt19937 gen(rd());
-    uniform_int_distribution<> distr(-50, 49); // Диапазон чисел от -50 до 49
+int main()
+{
+    int M[100];
+    int N;
 
-    // 1) Сформировать одномерный массив целых чисел
-    vector<int> M;
-    int initial_size = 15;
+    cout << "Введите количество элементов (1-40): ";
+    cin >> N;
 
-    for (int i = 0; i < initial_size; ++i) {
-        M.push_back(distr(gen));
+    if (N < 1 || N > 40)
+    {
+        cout << "Неверное количество элементов";
+        return 0;
     }
 
-    // 2) Распечатать полученный массив
-    cout << "1. Исходный массив:\n";
-    for (int num : M) {
-        cout << num << " ";
+    // Заполняем массив случайными числами
+    for (int i = 0; i < N; i++)
+    {
+        M[i] = rand() % 21 - 10;
     }
-    cout << "\n\n";
 
-    // 3) Удалить элементы, индексы которых кратны 3 (0, 3, 6, 9...)
-    // Идем с конца, чтобы удаление не ломало индексы еще не проверенных элементов
-    for (int i = M.size() - 1; i >= 0; --i) {
-        if (i % 3 == 0) {
-            M.erase(M.begin() + i);
+    cout << endl;
+    cout << "Исходный массив:" << endl;
+    for (int i = 0; i < N; i++)
+    {
+        cout << M[i] << " ";
+    }
+    cout << endl;
+
+    // Удаляем эл индексы которых кратны 3
+    int A[100];
+    int K = 0;
+
+    for (int i = 0; i < N; i++)
+    {
+        if (i % 3 != 0)
+        {
+            A[K] = M[i];
+            K++;
         }
     }
 
-    cout << "2. Массив после удаления элементов с индексами, кратными 3:\n";
-    for (int num : M) {
-        cout << num << " ";
+    N = K;
+
+    // Переносим оставшиеся эл обратно в основной массив
+    for (int i = 0; i < N; i++)
+    {
+        M[i] = A[i];
     }
-    cout << "\n\n";
 
-    // 4) Добавить после каждого отрицательного элемента элемент со значением |M[I-1] + 1|
-    // Также идем с конца, чтобы вставляемые элементы не сбивали обход
-    for (int i = M.size() - 1; i >= 0; --i) {
-        if (M[i] < 0) {
-            // Если отрицательный элемент первый (i == 0), предыдущего нет — берем 0
-            int prev_val = (i > 0) ? M[i - 1] : 0;
-            int new_val = abs(prev_val + 1);
+    cout << endl;
+    cout << "Массив после удаления элементов:" << endl;
+    for (int i = 0; i < N; i++)
+    {
+        cout << M[i] << " ";
+    }
+    cout << endl;
 
-            // Вставляем элемент сразу после текущего отрицательного
-            M.insert(M.begin() + i + 1, new_val);
+    // Добавляем новый эл после каждого отрицательного эл
+    for (int i = 0; i < N; i++)
+    {
+        if (M[i] < 0)
+        {
+            int value = abs(M[i] + 1);
+
+            // Освобождаем место для нового элемента
+            for (int j = N; j > i + 1; j--)
+            {
+                M[j] = M[j - 1];
+            }
+
+            M[i + 1] = value;
+            N++;
+            i++;
         }
     }
 
-    // 5) Распечатать полученный массив
-    cout << "3. Итоговый массив после добавления элементов:\n";
-    for (int num : M) {
-        cout << num << " ";
+    cout << endl;
+    cout << "Итоговый массив:" << endl;
+    for (int i = 0; i < N; i++)
+    {
+        cout << M[i] << " ";
     }
-    cout << "\n";
+    cout << endl;
 
     return 0;
 }
